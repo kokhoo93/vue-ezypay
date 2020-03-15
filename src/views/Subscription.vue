@@ -10,7 +10,7 @@
         <tr> 
           <th>Subscription Type :</th>
           <td>
-            <select v-model="input.subsType">
+            <select v-model="input.subsType" v-on:change="changeItem($event)">
               <option disabled value="">Please select one</option>
               <option value="DAILY">DAILY</option>
               <option value="WEEKLY">WEEKLY</option>
@@ -21,7 +21,7 @@
         <tr> 
           <th>Day of week :</th>
           <td>
-            <select v-model="input.daysOfWeek">
+            <select name="daysOfWeek" v-model="input.daysOfWeek" v-bind:disabled="weekDisable">
               <option disabled value="">Please select one</option>
               <option value="1">SUNDAY</option>
               <option value="2">MONDAY</option>
@@ -36,7 +36,7 @@
         <tr> 
           <th>Day of month :</th>
           <td>
-            <select v-model="input.daysOfMonth">
+            <select name="daysOfMonth" v-model="input.daysOfMonth" v-bind:disabled="monthDisable">
               <option disabled value="">Please select one</option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -98,16 +98,35 @@
           daysOfMonth:"",
           startDate:"",
           endDate:""
-        }
+        },
+        weekDisable: true,
+        monthDisable: true
       };
     },
     methods: {
       create() {
         if(this.input.amount == "" || this.input.amount <= 0) {
-          console.log("Amount must be greater than zero!!!");
+          alert("Amount must be greater than zero!!!");
+        }else if(Date.parse(this.input.startDate) >= Date.parse(this.input.endDate)) {
+          alert("End date must greater than start date!!!");
+        }else if(((Date.parse(this.input.endDate) - Date.parse(this.input.startDate)) / (1000 * 3600 * 24)) > 90) {
+          alert("Maximum duration is 90 days!!!");
         }else {
           this.$emit("authenticated", true);
           this.$router.replace({ name: "success" });
+        }
+      },
+
+      changeItem(event) {
+        if(event.target.value == "DAILY") {
+          this.weekDisable = true;
+          this.monthDisable = true;
+        }else if(event.target.value == "WEEKLY") {
+          this.weekDisable = false;
+          this.monthDisable = true;
+        }else if(event.target.value == "MONTHLY") {
+          this.weekDisable = true;
+          this.monthDisable = false;
         }
       }
     }
