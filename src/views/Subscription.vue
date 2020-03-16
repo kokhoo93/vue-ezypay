@@ -86,6 +86,7 @@
   </div> 
 </template>
 <script>
+import axios from 'axios';
   export default {
     name: 'Create',
     data() {
@@ -98,6 +99,12 @@
           daysOfMonth:"",
           startDate:"",
           endDate:""
+        },
+        output: 
+        {
+          amount: "",
+          subsType:"",
+          invoiceDates: []
         },
         weekDisable: true,
         monthDisable: true
@@ -112,8 +119,22 @@
         }else if(((Date.parse(this.input.endDate) - Date.parse(this.input.startDate)) / (1000 * 3600 * 24)) > 90) {
           alert("Maximum duration is 90 days!!!");
         }else {
-          this.$emit("authenticated", true);
-          this.$router.replace({ name: "success" });
+          axios.post('https://ezypay-api.herokuapp.com/create', {
+            body: {
+              "amount":this.input.amount,
+              "subsType": this.input.subsType,
+              "dayOfWeek": this.input.daysOfWeek,
+              "dayOfMonth": this.input.daysOfMonth,
+              "startDate": this.input.startDate,
+              "endDate": this.input.endDate
+            }
+          })
+          .then(function (response) {
+              console.log(response);
+          })
+          .catch(e => {
+            alert("Error in axios post : "+e);
+          })
         }
       },
 
