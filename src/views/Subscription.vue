@@ -120,14 +120,14 @@ import axios from 'axios';
           alert("Maximum duration is 90 days!!!");
         }else {
           axios.post('https://ezypay-api.herokuapp.com/create', {
-            body: {
+
               "amount":this.input.amount,
               "subsType": this.input.subsType,
               "dayOfWeek": this.input.daysOfWeek,
               "dayOfMonth": this.input.daysOfMonth,
               "startDate": this.input.startDate,
               "endDate": this.input.endDate
-            }
+
           })
           .then(function (response) {
               console.log(response);
