@@ -130,7 +130,7 @@ import axios from 'axios';
 
           })
           .then(function (response) {
-              console.log(response);
+              alert("Amount : " + response.data.amount + "\nSubscription Type : "+ response.data.subsType + "\nInvoice Dates : "+ response.data.invoiceDates);
           })
           .catch(e => {
             alert("Error in axios post : "+e);
